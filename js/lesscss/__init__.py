@@ -64,7 +64,6 @@ def lessc(in_path, *args):
         args = set(args.extend(os.environ['LESSC_ARGS'].split()))
 
     cmd = [lessc]+list(args)+[in_path]
-    print cmd
     p = subprocess.Popen(cmd,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)

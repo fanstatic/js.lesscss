@@ -34,5 +34,8 @@ setup(
         'fanstatic.libraries': [
             'less = js.lesscss:library',
             ],
+        'console_scripts': [
+            'jslessc = js.lesscss:main',
+            ],
         },
     )

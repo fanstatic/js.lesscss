@@ -5,6 +5,9 @@ parts
 .installed.cfg
 *.egg-info
 *.pyc
+*.swp
 *~
 develop-eggs
 dist
+node_modules
+js/lesscss/resources/my.*

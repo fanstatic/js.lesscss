@@ -60,6 +60,9 @@ def lessc(in_path, *args):
     if not args:
         args = ['-x']
 
+    if 'LESSC_ARGS' in os.environ:
+        args = set(args.extend(os.environ['LESSC_ARGS'].split()))
+
     cmd = [lessc]+list(args)+[in_path]
     print cmd
     p = subprocess.Popen(cmd,

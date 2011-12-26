@@ -67,7 +67,6 @@ def lessc(in_path, *args):
         args = set(args.extend(os.environ['LESSC_ARGS'].split()))
 
     cmd = [lessc] + list(args) + [in_path]
-    print cmd
     env = os.environ.copy()
 
     # avoid a bug if you're using gp.recipe.node

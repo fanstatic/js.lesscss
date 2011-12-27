@@ -63,7 +63,7 @@ def lessc(in_path, *args):
                 lessc = path
                 break
     if not lessc:
-        lessc = 'less'
+        lessc = 'lessc'
 
     args = list(args)
     if not args:

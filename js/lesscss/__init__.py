@@ -52,10 +52,16 @@ def lessc(in_path, *args):
     if 'LESSC' in os.environ:
         lessc = os.path.abspath(os.environ['LESSC'])
     if lessc is None or not isfile(lessc):
+        for path in ('bin/lessc', '/usr/bin/lessc', '/usr/local/bin/lessc'):
+            if isfile(path):
+                lessc = path
+                break
+    if lessc is None or not isfile(lessc):
         for path in (('node_modules', os.path.expanduser('~/.node_modules'))):
             path = os.path.join(path, 'less', 'bin', 'lessc')
             if isfile(path):
                 lessc = path
+                break
     if not lessc:
         lessc = 'less'
 
@@ -99,10 +105,17 @@ def main():
         args = ['.']
 
     for arg in args:
-        for root, dirnames, filenames in os.walk(arg):
-            for filename in filenames:
-                if filename.endswith('.less'):
-                    in_path = os.path.join(root, filename)
-                    print in_path
-                    out_path = lessc(in_path, '-x')
-                    print in_path, '->', out_path
+        if os.path.isfile(arg):
+            filename = os.path.abspath(arg)
+            if filename.endswith('.less'):
+                in_path = filename
+                out_path = lessc(in_path, '-x')
+                print in_path, '->', out_path
+        else:
+            for root, dirnames, filenames in os.walk(arg):
+                for filename in filenames:
+                    if filename.endswith('.less'):
+                        in_path = os.path.join(root, filename)
+                        print in_path
+                        out_path = lessc(in_path, '-x')
+                        print in_path, '->', out_path

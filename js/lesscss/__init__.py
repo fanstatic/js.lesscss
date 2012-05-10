@@ -5,7 +5,9 @@ from os.path import join
 import subprocess
 import shutil
 import os
+import logging
 
+log = logging.getLogger(__name__)
 
 def render_less(url):
     if url.endswith('.css'):
@@ -19,7 +21,6 @@ library = Library('less', 'resources')
 
 lesscss_js = Resource(library, 'less.min.js', bottom=True)
 lesscss = lesscss_js
-
 
 class LessResource(Resource):
 
@@ -76,23 +77,28 @@ def lessc(in_path, *args):
     env = os.environ.copy()
 
     # avoid a bug if you're using gp.recipe.node
-    del env['PYTHONPATH']
+    if env.has_key('PYTHONPATH'):
+        del env['PYTHONPATH']
 
     p = subprocess.Popen(cmd,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE,
                          env=env)
-    p.wait()
+    # use ``communicate`` rather than ``wait`` here as otherwise
+    # the buffer might become too big
+    # http://docs.python.org/library/subprocess.html
+    stdout, err = p.communicate()
 
-    err = p.stderr.read()
     if err.strip():
         msg = 'Error while compiling %s:\n%s' % (in_path, err)
         raise RuntimeError(msg)
 
     out_path = in_path + '.min.css'
+
     fd = open(out_path, 'w')
-    shutil.copyfileobj(p.stdout, fd)
+    fd.write(stdout)
     fd.close()
+    log.info("recreated css file %s", out_path)
     return out_path
 
 

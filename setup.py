@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.1.3'
+version = '1.3.0' # the number version of the package is the same than less.js version 
 
 
 def read(*rnames):
